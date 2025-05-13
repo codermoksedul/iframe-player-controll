@@ -11,6 +11,8 @@ export default function TestVideoPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // Ensure the code runs on the client-side
+
     let interval: NodeJS.Timeout | null = null;
     let player: any = null;
 
@@ -99,15 +101,6 @@ export default function TestVideoPlayer() {
     };
   }, [duration]);
 
-  // To handle iframe load status
-  const iframe = document.createElement("iframe");
-  iframe.onload = function () {
-    // toast.success("The iframe is loaded");
-  };
-  iframe.onerror = function () {
-    // toast.error("The iframe is not loaded");
-  };
-
   return (
     <div className="relative rounded-2xl overflow-hidden border border-themeBorderColor">
       <div className="relative aspect-video rounded-2xl overflow-hidden">
@@ -121,7 +114,7 @@ export default function TestVideoPlayer() {
         ></iframe>
       </div>
       {/* Playback info */}
-      <div className="text-gray-800text-sm font-mono px-2 py-1 rounded">
+      <div className="text-gray-800 text-sm font-mono px-2 py-1 rounded">
         <p>
           <strong>Current Time:</strong>{" "}
           {currentTime !== null ? currentTime.toFixed(2) + "s" : "Loading..."}
@@ -132,9 +125,9 @@ export default function TestVideoPlayer() {
         </p>
       </div>
 
-      {/* show play pouse all controls */}
+      {/* show play/pause status */}
       <div>
-        <div className=" text-sm font-mono px-2 py-1 rounded">
+        <div className="text-sm font-mono px-2 py-1 rounded">
           <p>
             <strong>Player Status:</strong> {isPlaying ? "Playing" : "Paused"}
           </p>
